@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chillax.dao.NoticeDao" >
+  <resultMap id="BaseResultMap" type="com.chillax.dto.Notice" >
+    <id column="userid" property="userid" jdbcType="CHAR" />
+    <id column="time" property="time" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+   userid,time, title, content
+  </sql>
+  <select id="query" resultMap="BaseResultMap" parameterType="com.chillax.dto.Notice" >
+    select 
+    <include refid="Base_Column_List" />
+    from notice
+    where userid = #{userid,jdbcType=CHAR}
+      and time = #{time,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.chillax.dto.Notice" >
+    delete from notice
+    where userid = #{userid,jdbcType=CHAR}
+      and time = #{time,jdbcType=VARCHAR}
+  </delete>
+ 
+  <insert id="insert" parameterType="com.chillax.dto.Notice" >
+    insert into notice
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userid != null" >
+        userid,
+      </if>
+      <if test="time != null" >
+        time,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userid != null" >
+        #{userid,jdbcType=CHAR},
+      </if>
+      <if test="time != null" >
+        #{time,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.chillax.dto.Notice" >
+    update notice
+    <set >
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where userid = #{userid,jdbcType=CHAR}
+      and time = #{time,jdbcType=VARCHAR}
+  </update>
+  
+</mapper>
