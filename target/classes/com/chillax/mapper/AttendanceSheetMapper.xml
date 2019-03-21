@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chillax.dao.AttendanceSheetMapper" >
+  <resultMap id="BaseResultMap" type="com.chillax.dto.AttendanceSheet" >
+   
+    <id column="checkindate" property="checkInDate" jdbcType="VARCHAR" />
+    <id column="checkintime" property="checkInTime" jdbcType="VARCHAR" />
+   
+    <result column="wid" property="wId" jdbcType="CHAR" />
+    <result column="checkouttime" property="checkOutTime" jdbcType="VARCHAR" />
+    <result column="punchcardresult" property="punchCardResult" jdbcType="INTEGER" />
+    <result column="note" property="note" jdbcType="VARCHAR" />
+    <result column="IP" property="ip" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    checkintime,  wid, checkouttime, punchcardresult,checkindate, 
+    note, IP
+  </sql>
+  <!-- 通过学号和签到时间显示签到表 -->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from attendancesheet
+    where wid = #{wid,jdbcType=CHAR}
+      and checkindate = #{checkInDate,jdbcType=VARCHAR}
+  </select>
+    <!-- 通过wid显示所有时间签到表 -->
+  <select id="selectHistoryByStuId" resultType="com.chillax.dto.AttendanceSheet" parameterType="com.chillax.dto.AttendanceSheet" >
+    select 
+    <include refid="Base_Column_List" />
+	    from attendancesheet
+	    where wid = #{wId,jdbcType=CHAR}
+	  </select>
+	      <!-- 通过时间显示所有学生签到表 -->
+	  <select id="selectAllstuByTime" resultMap="BaseResultMap" parameterType="java.lang.String" >
+	    select 
+    *
+    from attendancesheet
+    where checkindate = #{checkInDate,jdbcType=VARCHAR}
+  </select>
+  <!-- ***通过签到日期显示学生姓名和打卡情况 ***-->
+  <select id="selectByPrimaryKeyToBoolean" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    (Punchcardresult,note)
+    from attendancesheet
+    where checkindate = #{checkInDate,jdbcType=VARCHAR}
+  </select>
+  <!-- 通过学号和签到时间删除签到表信息 -->
+  <delete id="deleteByPrimaryKey" parameterType="com.chillax.dto.AttendanceSheet" >
+    delete from attendancesheet
+    where wid = #{wid,jdbcType=CHAR}
+      and checkindate = #{checkInDate,jdbcType=VARCHAR}
+  </delete>
+  <!-- 插入信息到签到表里 -->
+  <insert id="insert" parameterType="com.chillax.dto.AttendanceSheet" >
+    insert into attendancesheet ( checkintime,  checkindate,
+      wid, checkouttime, punchcardresult, 
+      note, IP
+      )
+    values ( #{checkInTime,jdbcType=VARCHAR}, #{checkInDate,jdbcType=VARCHAR},
+      #{wId,jdbcType=CHAR}, #{checkOutTime,jdbcType=VARCHAR}, #{punchCardResult,jdbcType=INTEGER}, 
+      #{note,jdbcType=VARCHAR}, #{ip,jdbcType=CHAR}
+      )
+  </insert>
+  <!-- 插入签到表信息 -->
+  <insert id="insertSelective" parameterType="com.chillax.dto.AttendanceSheet" >
+    insert into attendancesheet
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+     
+      <if test="checkInTime != null" >
+        checkintime,
+      </if>
+     
+       <if test="checkInDate != null" >
+        checkindate,
+      </if>
+      <if test="wId != null" >
+        wid,
+      </if>
+      <if test="checkOutTime != null" >
+        checkouttime,
+      </if>
+      <if test="punchCardResult != null" >
+        punchcardresult,
+      </if>
+      <if test="note != null" >
+        note,
+      </if>
+      <if test="ip != null" >
+        IP,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+    
+      <if test="checkInTime != null" >
+        #{checkInTime,jdbcType=VARCHAR},
+      </if>
+     
+      <if test="checkInDate != null" >
+        #{checkInDate,jdbcType=VARCHAR},
+      </if>
+      <if test="wId != null" >
+        #{wId,jdbcType=CHAR},
+      </if>
+      <if test="checkOutTime != null" >
+        #{checkOutTime,jdbcType=VARCHAR},
+      </if>
+      <if test="punchCardResult != null" >
+        #{punchCardResult,jdbcType=INTEGER},
+      </if>
+      <if test="note != null" >
+        #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null" >
+        #{ip,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <!-- 修改签到表信息,通过学号和签到日期修改相应条目 -->
+  <update id="updateByPrimaryKeySelective" parameterType="com.chillax.dto.AttendanceSheet" >
+    update attendancesheet
+    <set >
+     
+      <if test="wId != null" >
+        wid = #{wId,jdbcType=CHAR},
+      </if>
+      <if test="checkInTime != null" >
+        checkintime = #{checkInTime,jdbcType=VARCHAR},
+      </if>
+      <if test="checkOutTime != null" >
+        checkouttime = #{checkOutTime,jdbcType=VARCHAR},
+      </if>
+      <if test="punchCardResult != null" >
+        punchcardresult = #{punchCardResult,jdbcType=INTEGER},
+      </if>
+      <if test="note != null" >
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null" >
+        IP = #{ip,jdbcType=CHAR},
+      </if>
+    </set>
+    where wid = #{wid,jdbcType=CHAR}
+      and checkindate = #{checkInDate,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.chillax.dto.AttendanceSheet" >
+    update attendancesheet
+    set 
+      checkintime = #{checkInTime,jdbcType=VARCHAR},
+      checkouttime = #{checkOutTime,jdbcType=VARCHAR},
+      punchcardresult = #{punchCardResult,jdbcType=INTEGER},
+      note = #{note,jdbcType=VARCHAR},
+      IP = #{ip,jdbcType=CHAR}
+    where wid = #{wid,jdbcType=CHAR}
+      and checkindate = #{checkInDate,jdbcType=VARCHAR}
+  </update>
+</mapper>

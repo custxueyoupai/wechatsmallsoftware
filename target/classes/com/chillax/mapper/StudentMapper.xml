@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chillax.dao.StudentMapper" >
+  <resultMap id="BaseResultMap" type="com.chillax.dto.Student" >
+    <id column="stuid" property="stuid" jdbcType="CHAR" />
+    <result column="stuname" property="stuname" jdbcType="CHAR" />
+    <result column="stusex" property="stusex" jdbcType="CHAR" />
+    <result column="wid" property="wid" jdbcType="CHAR" />
+    <result column="registrationtime" property="registrationtime" jdbcType="CHAR" />
+    <result column="major" property="major" jdbcType="VARCHAR" />
+    <result column="institute" property="institute" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    stuid, stuname, stusex, wid, registrationtime, major, institute
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from student
+    where wid = #{wid,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from student
+    where stuid = #{stuid,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.chillax.dto.Student" >
+    insert into student (stuid, stuname, stusex, 
+      wid, registrationtime, 
+      major, institute)
+    values (#{stuid,jdbcType=CHAR}, #{stuname,jdbcType=CHAR}, #{stusex,jdbcType=CHAR}, 
+      #{wid,jdbcType=CHAR}, #{registrationtime,jdbcType=CHAR}, 
+      #{major,jdbcType=VARCHAR}, #{institute,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.chillax.dto.Student" >
+    insert into student
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="stuId != null" >
+        stuid,
+      </if>
+      <if test="stuName != null" >
+        stuname,
+      </if>
+      <if test="stuSex != null" >
+        stusex,
+      </if>
+      <if test="wId != null" >
+        wid,
+      </if>
+      <if test="note != null" >
+        note,
+      </if>
+      <if test="registrationTime != null" >
+        registrationtime,
+      </if>
+      <if test="major != null" >
+        major,
+      </if>
+      <if test="institute != null" >
+        institute,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="stuId != null" >
+        #{stuid,jdbcType=CHAR},
+      </if>
+      <if test="stuName != null" >
+        #{stuname,jdbcType=CHAR},
+      </if>
+      <if test="stuSex != null" >
+        #{stusex,jdbcType=CHAR},
+      </if>
+      <if test="wId != null" >
+        #{wid,jdbcType=CHAR},
+      </if>
+      <if test="registrationTime != null" >
+        #{registrationtime,jdbcType=CHAR},
+      </if>
+      <if test="major != null" >
+        #{major,jdbcType=VARCHAR},
+      </if>
+      <if test="institute != null" >
+        #{institute,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.chillax.dto.Student" >
+    update student
+    <set >
+      <if test="stuName != null" >
+        stuname = #{stuname,jdbcType=CHAR},
+      </if>
+      <if test="stuSex != null" >
+        stusex = #{stusex,jdbcType=CHAR},
+      </if>
+      <if test="wId != null" >
+        wid = #{wid,jdbcType=CHAR},
+      </if>
+      <if test="registrationTime != null" >
+        registrationtime = #{registrationtime,jdbcType=CHAR},
+      </if>
+      <if test="major != null" >
+        major = #{major,jdbcType=VARCHAR},
+      </if>
+      <if test="institute != null" >
+        institute = #{institute,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where stuid = #{stuid,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.chillax.dto.Student" >
+    update student
+    set stuname = #{stuname,jdbcType=CHAR},
+      stusex = #{stusex,jdbcType=CHAR},
+      wid = #{wId,jdbcType=CHAR},
+      registrationtime = #{registrationtime,jdbcType=CHAR},
+      major = #{major,jdbcType=VARCHAR},
+      institute = #{institute,jdbcType=VARCHAR}
+    where stuid = #{stuId,jdbcType=CHAR}
+  </update>
+</mapper>
